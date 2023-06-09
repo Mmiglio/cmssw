@@ -83,8 +83,6 @@ void ScBMTFRawToDigi::unpackOrbit(
     pos += 4 + sCount*8;
     assert(pos <= len);
 
-    uint32_t orbit = bl->orbit & 0x7FFFFFFF;
-
     if (debug){
       std::cout  << " BMTF #" << SDSID << " Orbit " << orbit << ", BX -> "<< bx << ", nStubs -> " << sCount << std::endl;
     }
@@ -97,15 +95,15 @@ void ScBMTFRawToDigi::unpackOrbit(
     for (unsigned int i=0; i<sCount; i++) {
 
       // shifts and masks
-      valid    = ((bl->stub[j] >> bmtf::shiftsStubs::valid   ) & bmtf::masksStubs::valid   );
-      phi      = ((bl->stub[j] >> bmtf::shiftsStubs::phi     ) & bmtf::masksStubs::phi     );
-      phiB     = ((bl->stub[j] >> bmtf::shiftsStubs::phiB    ) & bmtf::masksStubs::phiB    );
-      qual     = ((bl->stub[j] >> bmtf::shiftsStubs::qual    ) & bmtf::masksStubs::qual    );
-      eta      = ((bl->stub[j] >> bmtf::shiftsStubs::eta     ) & bmtf::masksStubs::eta     );
-      qeta     = ((bl->stub[j] >> bmtf::shiftsStubs::qeta    ) & bmtf::masksStubs::qeta    );
-      station  = ((bl->stub[j] >> bmtf::shiftsStubs::station ) & bmtf::masksStubs::station );
-      wheel    = ((bl->stub[j] >> bmtf::shiftsStubs::wheel   ) & bmtf::masksStubs::wheel   );
-      reserved = ((bl->stub[j] >> bmtf::shiftsStubs::reserved) & bmtf::masksStubs::reserved);
+      valid    = ((bl->stub[i] >> bmtf::shiftsStubs::valid   ) & bmtf::masksStubs::valid   );
+      phi      = ((bl->stub[i] >> bmtf::shiftsStubs::phi     ) & bmtf::masksStubs::phi     );
+      phiB     = ((bl->stub[i] >> bmtf::shiftsStubs::phiB    ) & bmtf::masksStubs::phiB    );
+      qual     = ((bl->stub[i] >> bmtf::shiftsStubs::qual    ) & bmtf::masksStubs::qual    );
+      eta      = ((bl->stub[i] >> bmtf::shiftsStubs::eta     ) & bmtf::masksStubs::eta     );
+      qeta     = ((bl->stub[i] >> bmtf::shiftsStubs::qeta    ) & bmtf::masksStubs::qeta    );
+      station  = ((bl->stub[i] >> bmtf::shiftsStubs::station ) & bmtf::masksStubs::station );
+      wheel    = ((bl->stub[i] >> bmtf::shiftsStubs::wheel   ) & bmtf::masksStubs::wheel   );
+      reserved = ((bl->stub[i] >> bmtf::shiftsStubs::reserved) & bmtf::masksStubs::reserved);
       sector   = static_cast<uint16_t>(SDSID - SDSNumbering::BmtfMinSDSID);
 
 

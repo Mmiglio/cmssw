@@ -115,7 +115,6 @@ namespace demux {
 
 namespace bmtf {
     struct block {
-        uint32_t orbit;
         uint64_t stub[8];
     };
 }
