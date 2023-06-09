@@ -161,7 +161,7 @@ int ScBMTFRawToDigi::calculateEta(uint i, int wheel, uint sector, uint station) 
 
 
 
-L1MuKBMTCombinedStub ScBMTFRawToDigi::buildStub(int wheel, int sector, int station,
+L1MuKBMTCombinedStub& ScBMTFRawToDigi::buildStub(int wheel, int sector, int station,
                                                 int phi, int phiB, bool tag,
                                                 int eta, int qeta, int bx,
                                                 int quality) {
@@ -194,22 +194,22 @@ L1MuKBMTCombinedStub ScBMTFRawToDigi::buildStub(int wheel, int sector, int stati
   }
 
   // TODO: tag = true is hardcode for now
-  L1MuKBMTCombinedStub stub(wheel, sector, station, phi, phiB, tag, bx, quality, eta1, eta2, qeta1, qeta2);
+  L1MuKBMTCombinedStub& stub(wheel, sector, station, phi, phiB, tag, bx, quality, eta1, eta2, qeta1, qeta2);
 
   return stub;
 }
 
 
 
-L1MuKBMTCombinedStub ScBMTFRawToDigi::buildStubNoEta(int wheel, int sector, int station,
-                                                     int phi, int phiB, bool tag,
-                                                     int bx, int quality) {
+L1MuKBMTCombinedStub& ScBMTFRawToDigi::buildStubNoEta(int wheel, int sector, int station,
+                                                      int phi, int phiB, bool tag,
+                                                      int bx, int quality) {
 
   int qeta1 = 0;
   int qeta2 = 0;
   int eta1 = 7;
   int eta2 = 7;
-  L1MuKBMTCombinedStub stub(wheel, sector, station, phi, phiB, tag, bx, quality, eta1, eta2, qeta1, qeta2);
+  L1MuKBMTCombinedStub& stub(wheel, sector, station, phi, phiB, tag, bx, quality, eta1, eta2, qeta1, qeta2);
 
   return stub;
 }
