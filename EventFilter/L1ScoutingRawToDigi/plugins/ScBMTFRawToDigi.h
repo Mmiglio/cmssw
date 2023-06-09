@@ -32,12 +32,12 @@ private:
   //void endStream() override;
 
   void unpackOrbit(
-    scoutingRun3::BmtfStubsOrbitCollection* stubs,
+    scoutingRun3::BmtfStubOrbitCollection* stubs,
     const unsigned char* buf, size_t len,
     int SDSID
   );
 
-  int calculateEta(uint i, int wheel, uint sector, uint station)
+  int calculateEta(uint i, int wheel, uint sector, uint station);
 
   L1MuKBMTCombinedStub buildStub(int wheel, int sector, int station,
                                  int phi, int phiB, bool tag,
