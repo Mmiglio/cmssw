@@ -120,10 +120,13 @@ void ScBMTFRawToDigi::unpackOrbit(
       phiB     = phiB  >=  512 ? phiB  - 1024 : phiB;
       wheel    = wheel >=    4 ? wheel -    8 : wheel;
 
+
       if (eta==0) {
-        stubs->push_back(bx, buildStubNoEta(wheel, sector, station, phi, phiB, tag, bx, qual));
+        const L1MuKBMTCombinedStub& comb_stub = buildStubNoEta(wheel, sector, station, phi, phiB, tag, bx, qual);
+        stubs->push_back(bx, comb_stub);
       } else {
-        stubs->push_back(bx, buildStub(wheel, sector, station, phi, phiB, tag, eta, qeta, bx, qual));
+        const L1MuKBMTCombinedStub& comb_stub = buildStub(wheel, sector, station, phi, phiB, tag, eta, qeta, bx, qual);
+        stubs->push_back(bx, comb_stub);
       }
 
     } // end of bx
@@ -161,7 +164,7 @@ int ScBMTFRawToDigi::calculateEta(uint i, int wheel, uint sector, uint station) 
 
 
 
-L1MuKBMTCombinedStub& ScBMTFRawToDigi::buildStub(int wheel, int sector, int station,
+L1MuKBMTCombinedStub ScBMTFRawToDigi::buildStub(int wheel, int sector, int station,
                                                 int phi, int phiB, bool tag,
                                                 int eta, int qeta, int bx,
                                                 int quality) {
@@ -194,22 +197,22 @@ L1MuKBMTCombinedStub& ScBMTFRawToDigi::buildStub(int wheel, int sector, int stat
   }
 
   // TODO: tag = true is hardcode for now
-  L1MuKBMTCombinedStub& stub(wheel, sector, station, phi, phiB, tag, bx, quality, eta1, eta2, qeta1, qeta2);
+  L1MuKBMTCombinedStub stub(wheel, sector, station, phi, phiB, tag, bx, quality, eta1, eta2, qeta1, qeta2);
 
   return stub;
 }
 
 
 
-L1MuKBMTCombinedStub& ScBMTFRawToDigi::buildStubNoEta(int wheel, int sector, int station,
-                                                      int phi, int phiB, bool tag,
-                                                      int bx, int quality) {
+L1MuKBMTCombinedStub ScBMTFRawToDigi::buildStubNoEta(int wheel, int sector, int station,
+                                                     int phi, int phiB, bool tag,
+                                                     int bx, int quality) {
 
   int qeta1 = 0;
   int qeta2 = 0;
   int eta1 = 7;
   int eta2 = 7;
-  L1MuKBMTCombinedStub& stub(wheel, sector, station, phi, phiB, tag, bx, quality, eta1, eta2, qeta1, qeta2);
+  L1MuKBMTCombinedStub stub(wheel, sector, station, phi, phiB, tag, bx, quality, eta1, eta2, qeta1, qeta2);
 
   return stub;
 }

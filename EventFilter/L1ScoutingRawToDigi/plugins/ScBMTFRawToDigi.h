@@ -39,12 +39,12 @@ private:
 
   int calculateEta(uint i, int wheel, uint sector, uint station);
 
-  L1MuKBMTCombinedStub& buildStub(int wheel, int sector, int station,
+  L1MuKBMTCombinedStub buildStub(int wheel, int sector, int station,
                                  int phi, int phiB, bool tag,
                                  int eta, int qeta, int bx,
                                  int quality);
 
-  L1MuKBMTCombinedStub& buildStubNoEta(int wheel, int sector, int station,
+  L1MuKBMTCombinedStub buildStubNoEta(int wheel, int sector, int station,
                                       int phi, int phiB, bool tag,
                                       int bx, int quality);
 
