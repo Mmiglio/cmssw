@@ -4,6 +4,7 @@
 <use name="DataFormats/FEDRawData"/>
 <use name="DataFormats/L1Trigger"/>
 <use name="DataFormats/L1Scouting"/>
+<use name="DataFormats/L1Muon"/>
 <export>
   <lib name="1"/>
 </export>

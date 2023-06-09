@@ -10,6 +10,7 @@
 #include "DataFormats/L1Trigger/interface/Jet.h"
 #include "DataFormats/L1Trigger/interface/Tau.h"
 #include "DataFormats/L1Trigger/interface/EtSum.h"
+#include "DataFormats/L1TMuon/interface/L1MuKBMTCombinedStub.h"
 
 #include <vector>
 
@@ -17,8 +18,8 @@ namespace scoutingRun3 {
 
   template <class T>
   class OrbitCollection {
-  
-    public: 
+
+    public:
       OrbitCollection(): bxData_(3565), nObjects_(0) {}
 
       void push_back(int bx, T &object) {
@@ -47,11 +48,12 @@ namespace scoutingRun3 {
       int nObjects_;
   };
 
-  typedef OrbitCollection<l1t::Muon>   MuonOrbitCollection;
-  typedef OrbitCollection<l1t::Jet>    JetOrbitCollection;
-  typedef OrbitCollection<l1t::EGamma> EGammaOrbitCollection;
-  typedef OrbitCollection<l1t::Tau>    TauOrbitCollection;
-  typedef OrbitCollection<l1t::EtSum>  EtSumOrbitCollection;
+  typedef OrbitCollection<l1t::Muon>            MuonOrbitCollection;
+  typedef OrbitCollection<l1t::Jet>             JetOrbitCollection;
+  typedef OrbitCollection<l1t::EGamma>          EGammaOrbitCollection;
+  typedef OrbitCollection<l1t::Tau>             TauOrbitCollection;
+  typedef OrbitCollection<l1t::EtSum>           EtSumOrbitCollection;
+  typedef OrbitCollection<L1MuKBMTCombinedStub> BmtfStubOrbitCollection;
 
 }
 #endif // DataFormats_L1Scouting_OrbitCollection_h

@@ -2,6 +2,7 @@
 <use name="FWCore/Utilities"/>
 <use name="DataFormats/Common"/>
 <use name="DataFormats/FEDRawData"/>
+<use name="DataFormats/L1Muon"/>
 <export>
   <lib name="1"/>
 </export>
