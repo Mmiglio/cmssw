@@ -89,13 +89,14 @@ void ScBMTFRawToDigi::unpackOrbit(
 
     // Unpack stubs for this BX
     // TODO: apply filters
-    int32_t valid, phi, phiB, tag, qual, eta, qeta, station, wheel, reserved, sector;
+    // int32_t valid, phi, phiB, tag, qual, eta, qeta, station, wheel, reserved, sector;
+    int32_t phi, phiB, tag, qual, eta, qeta, station, wheel, sector;
     // map for station and wheel, to find chambers with 2 stubs
     std::vector<std::vector<bool>> stwh_matrix(4, std::vector<bool>(5,false));
     for (unsigned int i=0; i<sCount; i++) {
 
       // shifts and masks
-      valid    = ((bl->stub[i] >> bmtf::shiftsStubs::valid   ) & bmtf::masksStubs::valid   );
+      // valid    = ((bl->stub[i] >> bmtf::shiftsStubs::valid   ) & bmtf::masksStubs::valid   );
       phi      = ((bl->stub[i] >> bmtf::shiftsStubs::phi     ) & bmtf::masksStubs::phi     );
       phiB     = ((bl->stub[i] >> bmtf::shiftsStubs::phiB    ) & bmtf::masksStubs::phiB    );
       qual     = ((bl->stub[i] >> bmtf::shiftsStubs::qual    ) & bmtf::masksStubs::qual    );
@@ -103,7 +104,7 @@ void ScBMTFRawToDigi::unpackOrbit(
       qeta     = ((bl->stub[i] >> bmtf::shiftsStubs::qeta    ) & bmtf::masksStubs::qeta    );
       station  = ((bl->stub[i] >> bmtf::shiftsStubs::station ) & bmtf::masksStubs::station );
       wheel    = ((bl->stub[i] >> bmtf::shiftsStubs::wheel   ) & bmtf::masksStubs::wheel   );
-      reserved = ((bl->stub[i] >> bmtf::shiftsStubs::reserved) & bmtf::masksStubs::reserved);
+      // reserved = ((bl->stub[i] >> bmtf::shiftsStubs::reserved) & bmtf::masksStubs::reserved);
       sector   = static_cast<uint16_t>(SDSID - SDSNumbering::BmtfMinSDSID);
 
 
