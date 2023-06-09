@@ -120,13 +120,10 @@ void ScBMTFRawToDigi::unpackOrbit(
       phiB     = phiB  >=  512 ? phiB  - 1024 : phiB;
       wheel    = wheel >=    4 ? wheel -    8 : wheel;
 
-      L1MuKBMTCombinedStub comb_stub;
       if (eta==0) {
-        comb_stub = buildStubNoEta(wheel, sector, station, phi, phiB, tag, bx, qual);
-        stubs->push_back(bx, comb_stub);
+        stubs->push_back(bx, buildStubNoEta(wheel, sector, station, phi, phiB, tag, bx, qual));
       } else {
-        comb_stub = buildStub(wheel, sector, station, phi, phiB, tag, eta, qeta, bx, qual);
-        stubs->push_back(bx, comb_stub);
+        stubs->push_back(bx, buildStub(wheel, sector, station, phi, phiB, tag, eta, qeta, bx, qual));
       }
 
     } // end of bx
