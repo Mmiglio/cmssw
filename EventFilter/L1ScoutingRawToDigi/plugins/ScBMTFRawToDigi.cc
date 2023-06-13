@@ -46,9 +46,7 @@ void ScBMTFRawToDigi::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     unpackOrbit(unpackedStubs.get(), sourceRawData.data(), orbitSize, i);
   }
 
-  std::cout << "Flattening OrbitCollection" << std::endl;
   unpackedStubs.get()->flatten();
-  std::cout << "Done Flattening OrbitCollection" << std::endl;
 
   // store collection in the event
   iEvent.put( std::move(unpackedStubs) );
@@ -113,12 +111,12 @@ void ScBMTFRawToDigi::unpackOrbit(
 
 
       // trick to set Ts2tag for L1MuKBMTFCombinedStub
-      if (stwh_matrix[station][wheel+2]==false) {
+      if (stwh_matrix[station-1][wheel+2]==false) {
         tag = 1;
       } else {
         tag = 0;
       }
-      stwh_matrix[station][wheel+2] = true;
+      stwh_matrix[station-1][wheel+2] = true;
 
       phi      = phi   >= 2048 ? phi   - 4096 : phi;
       phiB     = phiB  >=  512 ? phiB  - 1024 : phiB;
