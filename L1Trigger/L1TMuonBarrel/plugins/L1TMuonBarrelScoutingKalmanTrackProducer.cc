@@ -69,8 +69,8 @@ void L1TMuonBarrelScoutingKalmanTrackProducer::produce(edm::Event& iEvent, const
 
   std::vector<int> seenBxs;
   L1MuKBMTCombinedStubRefVector stubs;
-  for (uint i = 0; i < stubHandle->size(); ++i) {
-    L1MuKBMTCombinedStubRef r(stubHandle->getFlatData(i));
+  for (uint i = 0; i < stubHandle->sizeFlatData(); ++i) {
+    L1MuKBMTCombinedStubRef r(stubHandle->getFlatData(), i);
     stubs.push_back(r);
     seenBxs.push_back(stubHandle->getFlatData(i).bxNum());
   }
