@@ -98,7 +98,7 @@ void L1TMuonBarrelScoutingKalmanTrackProducer::produce(edm::Event& iEvent, const
 
   for (const auto& bx : seenBxs) {
     L1MuKBMTrackCollection tmp = trackFinder_->process(algo_, stubs, bx);
-    std::cout << "Step 6-1" << std::endl;
+    std::cout << "Step 6-1 (seen BX: " << bx << ")" << std::endl;
     for (const auto& track : tmp) {
       out->push_back(bx, track);
       algo_->addBMTFMuon(bx, track, outBMTF);
