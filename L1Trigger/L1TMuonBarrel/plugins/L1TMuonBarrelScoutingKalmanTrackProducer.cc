@@ -30,7 +30,7 @@ private:
   void beginStream(edm::StreamID) override;
   void produce(edm::Event&, const edm::EventSetup&) override;
   void endStream() override;
-  edm::EDGetTokenT<std::vector<L1MuKBMTCombinedStub> > src_;
+  edm::EDGetTokenT<scoutingRun3::BmtfStubOrbitCollection> src_;
   int bxMin_;
   int bxMax_;
   L1TMuonBarrelKalmanAlgo* algo_;
