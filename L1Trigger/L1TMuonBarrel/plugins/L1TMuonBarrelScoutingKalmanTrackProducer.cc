@@ -74,7 +74,7 @@ void L1TMuonBarrelScoutingKalmanTrackProducer::produce(edm::Event& iEvent, const
     stubs.push_back(r);
     seenBxs.push_back(stubHandle->getFlatData(i)->bxNum());
 
-    std::cout << "Stub producer, collected stub with " <<
+    std::cout << "Stub producer, collected stub with "
               << " Bx " << stubHandle->getFlatData(i)->bxNum()
               << " Wh " << stubHandle->getFlatData(i)->whNum()
               << " Sc " << stubHandle->getFlatData(i)->scNum()
