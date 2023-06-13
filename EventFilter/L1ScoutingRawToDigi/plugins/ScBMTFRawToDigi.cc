@@ -102,7 +102,7 @@ void ScBMTFRawToDigi::unpackOrbit(
       qual     = ((bl->stub[i] >> bmtf::shiftsStubs::qual    ) & bmtf::masksStubs::qual    );
       eta      = ((bl->stub[i] >> bmtf::shiftsStubs::eta     ) & bmtf::masksStubs::eta     );
       qeta     = ((bl->stub[i] >> bmtf::shiftsStubs::qeta    ) & bmtf::masksStubs::qeta    );
-      station  = ((bl->stub[i] >> bmtf::shiftsStubs::station ) & bmtf::masksStubs::station );
+      station  = ((bl->stub[i] >> bmtf::shiftsStubs::station ) & bmtf::masksStubs::station ) + 1;
       wheel    = ((bl->stub[i] >> bmtf::shiftsStubs::wheel   ) & bmtf::masksStubs::wheel   );
       // reserved = ((bl->stub[i] >> bmtf::shiftsStubs::reserved) & bmtf::masksStubs::reserved);
       sector   = static_cast<uint16_t>(SDSID - SDSNumbering::BmtfMinSDSID);
