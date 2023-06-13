@@ -122,10 +122,10 @@ void ScBMTFRawToDigi::unpackOrbit(
 
 
       if (eta==0) {
-        const L1MuKBMTCombinedStub& comb_stub = buildStubNoEta(wheel, sector, station, phi, phiB, tag, bx, qual);
+        L1MuKBMTCombinedStub comb_stub = buildStubNoEta(wheel, sector, station, phi, phiB, tag, bx, qual);
         stubs->push_back(bx, comb_stub);
       } else {
-        const L1MuKBMTCombinedStub& comb_stub = buildStub(wheel, sector, station, phi, phiB, tag, eta, qeta, bx, qual);
+        L1MuKBMTCombinedStub comb_stub = buildStub(wheel, sector, station, phi, phiB, tag, eta, qeta, bx, qual);
         stubs->push_back(bx, comb_stub);
       }
 
