@@ -37,7 +37,7 @@ private:
   L1TMuonBarrelKalmanTrackFinder* trackFinder_;
 };
 L1TMuonBarrelScoutingKalmanTrackProducer::L1TMuonBarrelScoutingKalmanTrackProducer(const edm::ParameterSet& iConfig)
-    : src_(consumes<scoutingRun3::OrbitCollection<L1MuKBMTCombinedStub> >(iConfig.getParameter<edm::InputTag>("src"))),
+    : src_(consumes<scoutingRun3::BmtfStubOrbitCollection>(iConfig.getParameter<edm::InputTag>("src"))),
       bxMin_(iConfig.getParameter<int>("bxMin")),
       bxMax_(iConfig.getParameter<int>("bxMax")),
       algo_(new L1TMuonBarrelKalmanAlgo(iConfig.getParameter<edm::ParameterSet>("algoSettings"))),
@@ -72,7 +72,7 @@ void L1TMuonBarrelScoutingKalmanTrackProducer::produce(edm::Event& iEvent, const
   for (uint i = 0; i < stubHandle->size(); ++i) {
     L1MuKBMTCombinedStubRef r(stubHandle->getFlatData(i));
     stubs.push_back(r);
-    seenBxs.push_back(stubHandle->getFlatData(i).bxNum())
+    seenBxs.push_back(stubHandle->getFlatData(i).bxNum());
   }
 
   std::unique_ptr<l1t::RegionalMuonCandBxCollection> outBMTF(new l1t::RegionalMuonCandBxCollection());
