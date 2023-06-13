@@ -80,7 +80,7 @@ void ScBMTFRawToDigi::unpackOrbit(
 
     // declare block to read
     bmtf::block *bl = (bmtf::block *)(buf + pos);
-    pos += 4 + sCount*8;
+    pos += sCount*8;
     assert(pos <= len);
 
     if (debug){
