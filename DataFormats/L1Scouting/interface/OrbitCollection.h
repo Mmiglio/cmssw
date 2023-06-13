@@ -41,6 +41,18 @@ namespace scoutingRun3 {
         //bxData_.clear();
       }
 
+      int getIndex(int i) {
+        return index_[i];
+      }
+
+      T getFlatData(int i) {
+        return flatData_[i];
+      }
+
+      std::vector<T> getBxData(int i) {
+        return bxData_[i];
+      }
+
     private:
       std::vector<int> index_;
       std::vector<T> flatData_;
