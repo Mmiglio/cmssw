@@ -46,7 +46,9 @@ void ScBMTFRawToDigi::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     unpackOrbit(unpackedStubs.get(), sourceRawData.data(), orbitSize, i);
   }
 
+  std::cout << "Flattening OrbitCollection" << std::endl;
   unpackedStubs.get()->flatten();
+  std::cout << "Done Flattening OrbitCollection" << std::endl;
 
   // store collection in the event
   iEvent.put( std::move(unpackedStubs) );
