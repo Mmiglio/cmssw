@@ -104,7 +104,7 @@ void L1TMuonBarrelScoutingKalmanTrackProducer::produce(edm::Event& iEvent, const
 
     for (const auto& track : tmp) {
       out->push_back(bx, track);
-      algo_->addBMTFMuon(bx, track, outBMTF);
+      algo_->addBMTFMuonNoTrunc(bx, track, outBMTF);
       if (debug_)
         std::cout << "KBMTF: candidate muon found and added" << std::endl;
     }
