@@ -42,8 +42,8 @@ L1TMuonBarrelScoutingKalmanTrackProducer::L1TMuonBarrelScoutingKalmanTrackProduc
       bxMin_(iConfig.getParameter<int>("bxMin")),
       bxMax_(iConfig.getParameter<int>("bxMax")),
       algo_(new L1TMuonBarrelKalmanAlgo(iConfig.getParameter<edm::ParameterSet>("algoSettings"))),
-      trackFinder_(new L1TMuonBarrelKalmanTrackFinder(iConfig.getParameter<edm::ParameterSet>("trackFinderSettings")),
-      debug_(iConfig.getParameter<bool>("debug"))) {
+      trackFinder_(new L1TMuonBarrelKalmanTrackFinder(iConfig.getParameter<edm::ParameterSet>("trackFinderSettings"))),
+      debug_(iConfig.getParameter<bool>("debug")) {
   produces<L1MuKBMTrackBxCollection>("KBMTF");
   produces<l1t::RegionalMuonCandBxCollection>("BMTF");
 }
