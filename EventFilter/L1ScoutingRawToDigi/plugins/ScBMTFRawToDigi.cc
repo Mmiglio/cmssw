@@ -135,8 +135,6 @@ void ScBMTFRawToDigi::unpackOrbit(
 
   } // end orbit while loop
 
-  // stubs->flatten();
-
 }
 
 

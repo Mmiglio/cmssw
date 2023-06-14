@@ -35,14 +35,16 @@ private:
   int bxMax_;
   L1TMuonBarrelKalmanAlgo* algo_;
   L1TMuonBarrelKalmanTrackFinder* trackFinder_;
+  bool debug_;
 };
 L1TMuonBarrelScoutingKalmanTrackProducer::L1TMuonBarrelScoutingKalmanTrackProducer(const edm::ParameterSet& iConfig)
     : src_(consumes<scoutingRun3::BmtfStubOrbitCollection>(iConfig.getParameter<edm::InputTag>("src"))),
       bxMin_(iConfig.getParameter<int>("bxMin")),
       bxMax_(iConfig.getParameter<int>("bxMax")),
       algo_(new L1TMuonBarrelKalmanAlgo(iConfig.getParameter<edm::ParameterSet>("algoSettings"))),
-      trackFinder_(new L1TMuonBarrelKalmanTrackFinder(iConfig.getParameter<edm::ParameterSet>("trackFinderSettings"))) {
-  produces<L1MuKBMTrackBxCollection>();
+      trackFinder_(new L1TMuonBarrelKalmanTrackFinder(iConfig.getParameter<edm::ParameterSet>("trackFinderSettings")),
+      debug_(iConfig.getParameter<bool>("debug"))) {
+  produces<L1MuKBMTrackBxCollection>("KBMTF");
   produces<l1t::RegionalMuonCandBxCollection>("BMTF");
 }
 
@@ -69,47 +71,50 @@ void L1TMuonBarrelScoutingKalmanTrackProducer::produce(edm::Event& iEvent, const
 
   std::vector<int> seenBxs;
   L1MuKBMTCombinedStubRefVector stubs;
-  std::cout << "Stub producer, flat data size: " << stubHandle->sizeFlatData() << std::endl;
+  if (debug_)
+    std::cout << "Stub producer, flat data size: " << stubHandle->sizeFlatData() << std::endl;
+
   for (int i = 0; i < stubHandle->sizeFlatData(); ++i) {
-    std::cout << "Stub producer, collected stub with "
-              << " Bx " << stubHandle->getFlatData(i)->bxNum()
-              << " Wh " << stubHandle->getFlatData(i)->whNum()
-              << " Sc " << stubHandle->getFlatData(i)->scNum()
-              << " St " << stubHandle->getFlatData(i)->stNum()
-              << std::endl;
+    if (debug_) {
+      std::cout << "Stub producer, collected stub with "
+                << " Bx " << stubHandle->getFlatData(i)->bxNum()
+                << " Wh " << stubHandle->getFlatData(i)->whNum()
+                << " Sc " << stubHandle->getFlatData(i)->scNum()
+                << " St " << stubHandle->getFlatData(i)->stNum()
+                << std::endl;
+    }
 
     L1MuKBMTCombinedStubRef r(stubHandle->getFlatData(), i);
     stubs.push_back(r);
     seenBxs.push_back(stubHandle->getFlatData(i)->bxNum());
   }
 
-  std::cout << "Step 1" << std::endl;
   std::unique_ptr<l1t::RegionalMuonCandBxCollection> outBMTF(new l1t::RegionalMuonCandBxCollection());
   std::unique_ptr<L1MuKBMTrackBxCollection> out(new L1MuKBMTrackBxCollection());
-  std::cout << "Step 2" << std::endl;
   outBMTF->setBXRange(bxMin_, bxMax_);
-  std::cout << "Step 3" << std::endl;
   out->setBXRange(bxMin_, bxMax_);
-  std::cout << "Step 4" << std::endl;
 
   std::sort(seenBxs.begin(), seenBxs.end());
   seenBxs.erase(std::unique(seenBxs.begin(), seenBxs.end()), seenBxs.end());
-  std::cout << "Step 5" << std::endl;
 
   for (const auto& bx : seenBxs) {
     L1MuKBMTrackCollection tmp = trackFinder_->process(algo_, stubs, bx);
-    std::cout << "Step 6-1 (seen BX: " << bx << ")" << std::endl;
+    if (debug_)
+      std::cout << "KBMTF: seen BX: " << bx << std::endl;
+
     for (const auto& track : tmp) {
       out->push_back(bx, track);
       algo_->addBMTFMuon(bx, track, outBMTF);
-      std::cout << "Step 6-1-1" << std::endl;
+      if (debug_)
+        std::cout << "KBMTF: candidate muon found and added" << std::endl;
     }
   }
-  std::cout << "Step 7" << std::endl;
+
+  if (debug_)
+    std::cout << "KBMTF: event processed" << std::endl;
+
   iEvent.put(std::move(outBMTF), "BMTF");
-  std::cout << "Step 8" << std::endl;
-  iEvent.put(std::move(out));
-  std::cout << "Step 9" << std::endl;
+  iEvent.put(std::move(out), "KBMTF");
 }
 
 // ------------ method called once each stream before processing any runs, lumis or events  ------------
