@@ -47,7 +47,7 @@ namespace scoutingRun3 {
       const std::vector<T>* getFlatData() const { return &flatData_; }
       const T* getFlatData(int i) const { return &(flatData_[i]); }
       const std::vector<T>* getFlatDataBx(int bx) const {
-        return &{flatData_.begin() + index_[bx-1], flatData_.begin() + index_[bx]-1}
+        return &{flatData_.begin() + index_[bx-1], flatData_.begin() + index_[bx]-1};
       }
 
       const std::vector<std::vector<T>>* getBxData() const { return &bxData_; }
