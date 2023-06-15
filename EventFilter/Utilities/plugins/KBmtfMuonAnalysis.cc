@@ -102,7 +102,7 @@ void KBmtfMuonAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
     bx = i;
     std::cout << "Check 2-1" << std::endl;
     // loop over gmt muons in BX
-    for (int j=(*gmtMuonsIndex)[i]; j<= (*gmtMuonsIndex)[i+1]; ++j) {
+    for (int j=(*gmtMuonsIndex)[i]; j<(*gmtMuonsIndex)[i+1]; ++j) {
       std::cout << "Check 2-1-1" << std::endl;
       const l1t::Muon *gmt_m = gmtMuons->getFlatData(j);
       std::cout << "Check 2-1-2" << std::endl;
