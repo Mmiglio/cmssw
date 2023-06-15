@@ -28,6 +28,7 @@
 #include "DataFormats/L1Trigger/interface/BXVector.h"
 
 #include "DataFormats/L1TMuon/interface/L1MuKBMTCombinedStub.h"
+#include "DataFormats/L1TMuon/interface/RegionalMuonCand.h"
 #include "DataFormats/L1TMuon/interface/RegionalMuonCandFwd.h"
 
 
