@@ -111,8 +111,8 @@ void KBmtfMuonAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
         l1_match_i = -1;
         l1_i = -1;
         // for (std::vector<l1t::RegionalMuonCand>::const_iterator bmtf_m=bmtfMuons->begin(bx-1); bmtf_m!=bmtfMuons->end(bx-1); ++bmtf_m) {
-        for (size_t k=0; k<=bmtfMuons->size(bx-1); ++h) {
-          const l1t::RegionalMuonCand *bmtf_m = bmtfMuons->at(bx-1, k);
+        for (size_t k=0; k<=bmtfMuons->size(bx-1); ++k) {
+          const l1t::RegionalMuonCand *bmtf_m = &(bmtfMuons->at(bx-1, k));
           ++l1_i;
           l1dr = calcDr(bmtf_m, gmt_m);
           if (l1dr < l1dr_min) {
@@ -175,6 +175,6 @@ double KBmtfMuonAnalysis::calcDr(const l1t::RegionalMuonCand *l1_reg_m, const l1
   }
 
   return dr;
-}qssssssssssssss
+}
 
 DEFINE_FWK_MODULE(KBmtfMuonAnalysis);
