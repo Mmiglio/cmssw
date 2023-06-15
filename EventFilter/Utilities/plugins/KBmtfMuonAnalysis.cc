@@ -33,7 +33,7 @@
 
 
 // class declaration
-class KBmtfMuonAnalysis : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
+class KBmtfMuonAnalysis : public edm::stream::EDAnalyzer<> {
   public:
     explicit KBmtfMuonAnalysis(const edm::ParameterSet&);
     ~KBmtfMuonAnalysis();
@@ -41,7 +41,7 @@ class KBmtfMuonAnalysis : public edm::one::EDAnalyzer<edm::one::SharedResources>
     static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
     unsigned int calcGlobalPhi(const l1t::RegionalMuonCand*);
-    double calcDr(const l1t::RegionalMuonCand*, const l1t::Muon*){
+    double calcDr(const l1t::RegionalMuonCand*, const l1t::Muon*);
 
   private:
     virtual void beginJob() override;
