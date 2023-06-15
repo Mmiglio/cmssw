@@ -33,16 +33,21 @@
 
 
 // class declaration
-class KBmtfMuonAnalysis : public edm::stream::EDAnalyzer<> {
+class KBmtfMuonAnalysis : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
   public:
     explicit KBmtfMuonAnalysis(const edm::ParameterSet&);
-    ~KBmtfMuonAnalysis() override{};
-    void analyze(const edm::Event&, const edm::EventSetup&) override;
+    ~KBmtfMuonAnalysis();
+
+    static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
     unsigned int calcGlobalPhi(const l1t::RegionalMuonCand*);
     double calcDr(const l1t::RegionalMuonCand*, const l1t::Muon*){
 
   private:
+    virtual void beginJob() override;
+    virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+    virtual void endJob() override;
+
     edm::EDGetTokenT<scoutingRun3::MuonOrbitCollection> gmtMuonToken_;
     edm::EDGetTokenT<l1t::RegionalMuonCandBxCollection> bmtfMuonToken_;
 
@@ -55,18 +60,28 @@ class KBmtfMuonAnalysis : public edm::stream::EDAnalyzer<> {
     bool debug_;
 };
 
-KBmtfMuonAnalysis::KBmtfMuonAnalysis(const edm::ParameterSet& iConfig) {
-  gmtMuonToken_ = consumes<scoutingRun3::MuonOrbitCollection>(iConfig.getParameter<InputTag>("gmtMuonInputTag"));
-  bmtfMuonToken_ = consumes<l1t::RegionalMuonCandBxCollection>(iConfig.getParameter<InputTag>("bmtfMuonInputTag"));
 
-  drCut_ = iConfig.getParameter<double>("drCut");
-  phiMult_ = iConfig.getParameter<double>("phiMult"); // cms.double(576./(2*math.pi)),
-  etaMult_ = iConfig.getParameter<double>("etaMult"); // cms.double(1./0.010875),
 
-  minBx_ = iConfig.getParameter<int>("minBx");
-  maxBx_ = iConfig.getParameter<int>("maxBx");
-  debug_ = iConfig.getParameter<bool>("debug");
+KBmtfMuonAnalysis::KBmtfMuonAnalysis(const edm::ParameterSet& iConfig)
+    : gmtMuonToken_(consumes<scoutingRun3::MuonOrbitCollection>(iConfig.getParameter<edm::InputTag>("gmtMuonInputTag"))),
+      bmtfMuonToken_(consumes<l1t::RegionalMuonCandBxCollection>(iConfig.getParameter<edm::InputTag>("bmtfMuonInputTag"))),
+      drCut_(iConfig.getParameter<double>("drCut")),
+      phiMult_(iConfig.getParameter<double>("phiMult")),
+      etaMult_(iConfig.getParameter<double>("etaMult")),
+      minBx_(iConfig.getParameter<int>("minBx")),
+      maxBx_(iConfig.getParameter<int>("maxBx")),
+      debug_(iConfig.getParameter<bool>("debug"))
+{
+
 }
+
+
+
+KBmtfMuonAnalysis::~KBmtfMuonAnalysis()
+{
+
+}
+
 
 
 
@@ -87,21 +102,21 @@ void KBmtfMuonAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
     std::cout << " ----------------------------------------------------- " << std::endl;
   }
 
-  std::vector<int>* gmtMuonsIndex = gmtMuons->getIndex();
+  const std::vector<int>* gmtMuonsIndex = gmtMuons->getIndex();
   int bx = 0;
   double l1dr = 0.0, l1dr_min = 0.0;
   int l1_match_i = -1, l1_i = -1;
   int n_matches = 0;
   int n_gmt_m = 0;
   // loop over BX
-  for (int i=0; i <= gmtMuonsIndex->size()-1; ++i) {
+  for (size_t i=0; i <= gmtMuonsIndex->size()-1; ++i) {
     bx = i;
     // loop over gmt muons in BX
-    for (int j=gmtMuonsIndex[i]; j<= gmtMuonsIndex[i+1]; ++j) {
-      l1t::Muon& gmt_m = gmtMuons[j];
+    for (int j=(*gmtMuonsIndex)[i]; j<= (*gmtMuonsIndex)[i+1]; ++j) {
+      const l1t::Muon *gmt_m = gmtMuons->getFlatData(j);
 
       // barrel gmt muons
-      if ((gmt_m.tfMuonIndex()>=36) && (gmt_m.tfMuonIndex()<=70)) {
+      if ((gmt_m->tfMuonIndex()>=36) && (gmt_m->tfMuonIndex()<=70)) {
         ++n_gmt_m;
 
         // loop over BMTF muons in same BX
@@ -110,7 +125,7 @@ void KBmtfMuonAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
         l1_i = -1;
         for (std::vector<l1t::RegionalMuonCand>::const_iterator bmtf_m=bmtfMuons->begin(bx-1); bmtf_m!=bmtfMuons->end(bx-1); ++bmtf_m) {
           ++l1_i;
-          l1dr = calcDr(bmtf_m, &gmt_m);
+          l1dr = calcDr(bmtf_m, gmt_m);
           if (l1dr < l1dr_min) {
             l1_match_i = l1_i;
             l1dr_min = lidr;
@@ -133,7 +148,7 @@ void KBmtfMuonAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
 
 
 
-unsigned int KBmtfMuonAnalysis::calcGlobalPhi(const l1t::RegionalMuonCand * l1_reg_m) {
+unsigned int KBmtfMuonAnalysis::calcGlobalPhi(const l1t::RegionalMuonCand *l1_reg_m) {
 
   unsigned int globalPhi = l1_reg_m->processor()*48 + l1_reg_m->hwPhi();
   globalPhi += 576 - 24;      // first processor starts at -15degrees in cms phi
@@ -172,6 +187,30 @@ double KBmtfMuonAnalysis::calcDr(const l1t::RegionalMuonCand *l1_reg_m, const l1
 
   return dr;
 }
+
+
+
+void KBmtfMuonAnalysis::beginJob()
+{
+
+}
+
+void KBmtfMuonAnalysis::endJob()
+{
+
+}
+
+
+
+void KBmtfMuonAnalysis::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+  //The following says we do not know what parameters are allowed so do no validation
+  // Please change this to state exactly what you do use, even if it is no parameters
+  edm::ParameterSetDescription desc;
+  desc.setUnknown();
+  descriptions.addDefault(desc);
+}
+
+
 
 
 DEFINE_FWK_MODULE(KBmtfMuonAnalysis);
