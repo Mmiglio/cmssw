@@ -33,7 +33,7 @@
 
 
 // class declaration
-class KBmtfMuonAnalysis : public edm::stream::EDAnalyzer<> {
+class KBmtfMuonAnalysis : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
   public:
     explicit KBmtfMuonAnalysis(const edm::ParameterSet&);
     ~KBmtfMuonAnalysis();
@@ -95,7 +95,7 @@ void KBmtfMuonAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
   iEvent.getByToken(gmtMuonToken_, gmtMuons);
   iEvent.getByToken(bmtfMuonToken_, bmtfMuons);
 
-  if (verbose_) {
+  if (debug_) {
     std::cout << " -----------------------------------------------------  " << std::endl;
     std::cout << " *********** Run " << std::dec << iEvent.id().run() << " Event " << iEvent.id().event()
               << " **************  " << std::endl;
@@ -123,12 +123,14 @@ void KBmtfMuonAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
         l1dr_min = 100.0;
         l1_match_i = -1;
         l1_i = -1;
-        for (std::vector<l1t::RegionalMuonCand>::const_iterator bmtf_m=bmtfMuons->begin(bx-1); bmtf_m!=bmtfMuons->end(bx-1); ++bmtf_m) {
+        // for (std::vector<l1t::RegionalMuonCand>::const_iterator bmtf_m=bmtfMuons->begin(bx-1); bmtf_m!=bmtfMuons->end(bx-1); ++bmtf_m) {
+        for (size_t k=0; k<=bmtfMuons->size(bx-1); ++h) {
+          const l1t::RegionalMuonCand *bmtf_m = bmtfMuons->at(bx-1, k);
           ++l1_i;
           l1dr = calcDr(bmtf_m, gmt_m);
           if (l1dr < l1dr_min) {
             l1_match_i = l1_i;
-            l1dr_min = lidr;
+            l1dr_min = l1dr;
           }
         }
 
@@ -161,7 +163,7 @@ unsigned int KBmtfMuonAnalysis::calcGlobalPhi(const l1t::RegionalMuonCand *l1_re
 
 double KBmtfMuonAnalysis::calcDr(const l1t::RegionalMuonCand *l1_reg_m, const l1t::Muon *l1_gmt_m) {
 
-  double l1_reg_m_physPhi = calcGlobalPhi(l1_reg_m)/phiMult_);
+  double l1_reg_m_physPhi = calcGlobalPhi(l1_reg_m)/phiMult_;
   if (l1_reg_m_physPhi > M_PI) { l1_reg_m_physPhi -= 2*M_PI; }
 
   double l1_gmt_m_physPhi = l1_gmt_m->hwPhi()/phiMult_;
