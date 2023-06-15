@@ -33,21 +33,16 @@
 
 
 // class declaration
-class KBmtfMuonAnalysis : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
+class KBmtfMuonAnalysis : public edm::stream::EDAnalyzer<> {
   public:
     explicit KBmtfMuonAnalysis(const edm::ParameterSet&);
-    ~KBmtfMuonAnalysis();
-
-    static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
+    ~KBmtfMuonAnalysis() override{};
+    void analyze(const edm::Event&, const edm::EventSetup&) override;
 
     unsigned int calcGlobalPhi(const l1t::RegionalMuonCand*);
     double calcDr(const l1t::RegionalMuonCand*, const l1t::Muon*);
 
   private:
-    virtual void beginJob() override;
-    virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
-    virtual void endJob() override;
-
     edm::EDGetTokenT<scoutingRun3::MuonOrbitCollection> gmtMuonToken_;
     edm::EDGetTokenT<l1t::RegionalMuonCandBxCollection> bmtfMuonToken_;
 
@@ -74,14 +69,6 @@ KBmtfMuonAnalysis::KBmtfMuonAnalysis(const edm::ParameterSet& iConfig)
 {
 
 }
-
-
-
-KBmtfMuonAnalysis::~KBmtfMuonAnalysis()
-{
-
-}
-
 
 
 
@@ -188,31 +175,6 @@ double KBmtfMuonAnalysis::calcDr(const l1t::RegionalMuonCand *l1_reg_m, const l1
   }
 
   return dr;
-}
-
-
-
-void KBmtfMuonAnalysis::beginJob()
-{
-
-}
-
-void KBmtfMuonAnalysis::endJob()
-{
-
-}
-
-
-
-void KBmtfMuonAnalysis::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
-  //The following says we do not know what parameters are allowed so do no validation
-  // Please change this to state exactly what you do use, even if it is no parameters
-  edm::ParameterSetDescription desc;
-  desc.setUnknown();
-  descriptions.addDefault(desc);
-}
-
-
-
+}qssssssssssssss
 
 DEFINE_FWK_MODULE(KBmtfMuonAnalysis);
