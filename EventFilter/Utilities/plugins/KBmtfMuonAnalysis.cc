@@ -110,7 +110,7 @@ void KBmtfMuonAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
     // barrel gmt muons
     if ((gmt_m->tfMuonIndex()>=36) && (gmt_m->tfMuonIndex()<=70)) {
       ++n_gmt_m;
-      updateTotGmtM()
+      updateTotGmtM();
 
       // loop over BMTF muons in same BX
       l1dr_min = 100.0;
