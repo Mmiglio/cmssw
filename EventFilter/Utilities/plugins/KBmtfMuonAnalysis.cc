@@ -98,8 +98,9 @@ void KBmtfMuonAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
   int n_gmt_m = 0;
   // loop over BX
   std::cout << "Check 1 " << gmtMuonsIndex->size() << std::endl;
-  if (gmtMuonsIndex->sizeFlatData()!=0) {
-    for (size_t i=0; i <= gmtMuonsIndex->size()-1; ++i) {
+  if (gmtMuonsIndex->size()!=0) {
+    for (size_t i=0; i < gmtMuonsIndex->size()-1; ++i) {
+      // get BX number
       bx = i;
       std::cout << "Check 2-1 " << gmtMuons->getIndex(i) << std::endl;
       std::cout << "Check 2-1 " << gmtMuons->getIndex(i+1) << std::endl;
