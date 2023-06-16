@@ -26,7 +26,8 @@ process.dump = cms.EDAnalyzer("KBmtfMuonAnalysis",
     etaMult = cms.double(1./0.010875),
     minBx = cms.int32(0),
     maxBx = cms.int32(3564),
-    debug = cms.bool(False)
+    debug = cms.bool(False),
+    filenameResults = cms.string("results.csv")
 )
 
 

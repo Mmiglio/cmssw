@@ -62,6 +62,10 @@ class KBmtfMuonAnalysis : public edm::stream::EDAnalyzer<> {
 
     int totGmtM_;
     int totMatches_;
+
+    string filenameResults_;
+    std::ofstream fileResults_;
+
 };
 
 
@@ -76,7 +80,9 @@ KBmtfMuonAnalysis::KBmtfMuonAnalysis(const edm::ParameterSet& iConfig)
       maxBx_(iConfig.getParameter<int>("maxBx")),
       debug_(iConfig.getParameter<bool>("debug")),
       totGmtM_(0),
-      totMatches_(0)
+      totMatches_(0),
+      filenameResults_(iConfig.getParameter<string>("filenameResults")),
+      filePairs_(filenameResults_)
 {
 
 }
@@ -106,6 +112,8 @@ void KBmtfMuonAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
   int l1_match_i = -1, l1_i = -1;
   int n_matches = 0;
   int n_gmt_m = 0;
+  double l1_reg_m_physPhi, l1_reg_m_physEta;
+  double l1_gmt_m_physPhi, l1_gmt_m_physEta;
   for (int i=0; i < gmtMuons->sizeFlatData(); ++i) {
     const l1t::Muon *gmt_m = gmtMuons->getFlatData(i);
 
@@ -118,6 +126,10 @@ void KBmtfMuonAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
       l1dr_min = 100.0;
       l1_match_i = -1;
       l1_i = -1;
+      l1_reg_m_physPhi = -100.0;
+      l1_gmt_m_physPhi = gmt_m->hwPhi()/phiMult_;
+      l1_reg_m_physEta = -100.0;
+      l1_gmt_m_physEta = gmt_m->hwEta()/etaMult_;
       // for (std::vector<l1t::RegionalMuonCand>::const_iterator bmtf_m=bmtfMuons->begin(bx-1); bmtf_m!=bmtfMuons->end(bx-1); ++bmtf_m) {
       for (int bx=0; bx<maxBx_; ++bx) {
         if (bmtfMuons->size(bx)==0) continue;
@@ -129,6 +141,8 @@ void KBmtfMuonAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
           if (l1dr < l1dr_min) {
             l1_match_i = l1_i;
             l1dr_min = l1dr;
+            l1_reg_m_physPhi = calcGlobalPhi(bmtf_m)/phiMult_;
+            l1_reg_m_physEta = bmtf_m->hwEta()/etaMult_;
           }
         }
       }
@@ -141,6 +155,13 @@ void KBmtfMuonAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
                   << "    #gmt muons: " << n_gmt_m << "    #matches " << n_matches
                   << "    #Tot gmt muons: " << getTotGmtM() << "    #Tot matches " << getTotMatches()
                   << std::endl;
+
+        fileResults_ << l1dr_min << ","
+                     << l1_reg_m_physPhi << ","
+                     << l1_gmt_m_physPhi << ","
+                     << l1_reg_m_physEta << ","
+                     << l1_gmt_m_physEta << std::endl;
+
       }
     }
 
