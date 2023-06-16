@@ -43,6 +43,9 @@ class KBmtfMuonAnalysis : public edm::stream::EDAnalyzer<> {
     unsigned int calcGlobalPhi(const l1t::RegionalMuonCand*);
     double calcDr(const l1t::RegionalMuonCand*, const l1t::Muon*);
 
+    int updateTotGmtM() { return ++totGmtM_; };
+    int updateTotMatches() { return ++totMatches_; };
+
   private:
     edm::EDGetTokenT<scoutingRun3::MuonOrbitCollection> gmtMuonToken_;
     edm::EDGetTokenT<l1t::RegionalMuonCandBxCollection> bmtfMuonToken_;
@@ -54,6 +57,9 @@ class KBmtfMuonAnalysis : public edm::stream::EDAnalyzer<> {
     int minBx_;
     int maxBx_;
     bool debug_;
+
+    int totGmtM_;
+    int totMatches_;
 };
 
 
@@ -66,7 +72,9 @@ KBmtfMuonAnalysis::KBmtfMuonAnalysis(const edm::ParameterSet& iConfig)
       etaMult_(iConfig.getParameter<double>("etaMult")),
       minBx_(iConfig.getParameter<int>("minBx")),
       maxBx_(iConfig.getParameter<int>("maxBx")),
-      debug_(iConfig.getParameter<bool>("debug"))
+      debug_(iConfig.getParameter<bool>("debug")),
+      totGmtM_(0),
+      totMatches_(0)
 {
 
 }
@@ -96,14 +104,13 @@ void KBmtfMuonAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
   int l1_match_i = -1, l1_i = -1;
   int n_matches = 0;
   int n_gmt_m = 0;
-  std::cout << "Check 1 " << gmtMuonsIndex->size() << " " << gmtMuons->sizeFlatData() << std::endl;
   for (int i=0; i < gmtMuons->sizeFlatData(); ++i) {
     const l1t::Muon *gmt_m = gmtMuons->getFlatData(i);
 
     // barrel gmt muons
     if ((gmt_m->tfMuonIndex()>=36) && (gmt_m->tfMuonIndex()<=70)) {
-      std::cout << "Check 2-1-2-1" << std::endl;
       ++n_gmt_m;
+      updateTotGmtM()
 
       // loop over BMTF muons in same BX
       l1dr_min = 100.0;
@@ -114,33 +121,28 @@ void KBmtfMuonAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
         if (bmtfMuons->size(bx)==0) continue;
 
         for (size_t k=0; k<bmtfMuons->size(bx); ++k) {
-          std::cout << "Check 2-1-2-1-1" << std::endl;
           const l1t::RegionalMuonCand *bmtf_m = &(bmtfMuons->at(bx, k));
-          std::cout << "Check 2-1-2-1-2" << std::endl;
           ++l1_i;
           l1dr = calcDr(bmtf_m, gmt_m);
-          std::cout << "Check 2-1-2-1-3" << std::endl;
           if (l1dr < l1dr_min) {
             l1_match_i = l1_i;
             l1dr_min = l1dr;
           }
         }
       }
-      std::cout << "Check 2-1-2-2" << std::endl;
 
       if (l1dr_min < drCut_) {
         ++n_matches;
+        updateTotMatches();
         std::cout << "Match: " << std::endl;
         std::cout << "    dr = " << l1dr_min << "    l1_match " << l1_match_i
                   << "    #gmt muons: " << n_gmt_m << "    #matches " << n_matches
                   << std::endl;
       }
     }
-    std::cout << "Check 2-1-3" << std::endl;
 
   }
 
-  std::cout << "Check 3" << std::endl;
   // loop over BX
   // std::cout << "Check 1 " << gmtMuonsIndex->size() << " " << gmtMuons->sizeFlatData() << std::endl;
   // if (gmtMuonsIndex->size()!=0) {
