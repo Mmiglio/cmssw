@@ -110,7 +110,7 @@ void KBmtfMuonAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
       l1_match_i = -1;
       l1_i = -1;
       // for (std::vector<l1t::RegionalMuonCand>::const_iterator bmtf_m=bmtfMuons->begin(bx-1); bmtf_m!=bmtfMuons->end(bx-1); ++bmtf_m) {
-      for (size_t bx=0; bx<maxBx_; ++bx) {
+      for (int bx=0; bx<maxBx_; ++bx) {
         if (bmtfMuons->size(bx)==0) continue;
 
         for (size_t k=0; k<bmtfMuons->size(bx); ++k) {
