@@ -43,8 +43,10 @@ class KBmtfMuonAnalysis : public edm::stream::EDAnalyzer<> {
     unsigned int calcGlobalPhi(const l1t::RegionalMuonCand*);
     double calcDr(const l1t::RegionalMuonCand*, const l1t::Muon*);
 
-    int updateTotGmtM() { return ++totGmtM_; };
-    int updateTotMatches() { return ++totMatches_; };
+    void updateTotGmtM() { ++totGmtM_; };
+    void updateTotMatches() { ++totMatches_; };
+    int getTotGmtM() { return totGmtM_; };
+    int getTotMatches() { return totMatches_; };
 
   private:
     edm::EDGetTokenT<scoutingRun3::MuonOrbitCollection> gmtMuonToken_;
@@ -137,6 +139,7 @@ void KBmtfMuonAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup&
         std::cout << "Match: " << std::endl;
         std::cout << "    dr = " << l1dr_min << "    l1_match " << l1_match_i
                   << "    #gmt muons: " << n_gmt_m << "    #matches " << n_matches
+                  << "    #Tot gmt muons: " << getTotGmtM() << "    #Tot matches " << getTotMatches()
                   << std::endl;
       }
     }
