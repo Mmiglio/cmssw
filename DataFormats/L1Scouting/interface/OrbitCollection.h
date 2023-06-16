@@ -42,7 +42,7 @@ namespace scoutingRun3 {
       }
 
       const std::vector<int>* getIndex() const { return &index_; }
-      const int* getIndex(int i) const { return &(index_[i]); }
+      int getIndex(int i) const { return index_[i]; }
 
       const std::vector<T>* getFlatData() const { return &flatData_; }
       const T* getFlatData(int i) const { return &(flatData_[i]); }
