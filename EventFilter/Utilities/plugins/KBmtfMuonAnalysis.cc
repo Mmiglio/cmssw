@@ -82,7 +82,7 @@ KBmtfMuonAnalysis::KBmtfMuonAnalysis(const edm::ParameterSet& iConfig)
       totGmtM_(0),
       totMatches_(0),
       filenameResults_(iConfig.getParameter<string>("filenameResults")),
-      filePairs_(filenameResults_)
+      fileResults_(filenameResults_)
 {
 
 }
