@@ -7,7 +7,7 @@
 #include "EventFilter/Utilities/interface/DAQSource.h"
 #include "EventFilter/Utilities/interface/DAQSourceModels.h"
 #include "EventFilter/Utilities/interface/DAQSourceModelsFRD.h"
-#include "EventFilter/Utilities/interface/DAQSourceModelsScouting.h"
+#include "EventFilter/Utilities/interface/DAQSourceModelsScoutingRun3.h"
 
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/InputSourceDescription.h"
@@ -81,6 +81,8 @@ DAQSource::DAQSource(edm::ParameterSet const& pset, edm::InputSourceDescription 
     dataMode_.reset(new DataModeFRD(this));
   } else if (dataModeConfig_ == "FRDStriped") {
     dataMode_.reset(new DataModeFRDStriped(this));
+  } else if (dataModeConfig_ == "ScoutingRun3") {
+    dataMode_.reset(new DataModeScoutingRun3(this));
   } else
     throw cms::Exception("DAQSource::DAQSource") << "Unknown data mode " << dataModeConfig_;
 
@@ -101,7 +103,9 @@ DAQSource::DAQSource(edm::ParameterSet const& pset, edm::InputSourceDescription 
     }
   }
 
-  dataMode_->makeDirectoryEntries(daqDirector_->getBUBaseDirs(), daqDirector_->runString());
+  dataMode_->makeDirectoryEntries(daqDirector_->getBUBaseDirs(),
+                                  daqDirector_->getBUBaseDirsNSources(),
+                                  daqDirector_->runString());
 
   auto& daqProvenanceHelpers = dataMode_->makeDaqProvenanceHelpers();
   for (const auto& daqProvenanceHelper : daqProvenanceHelpers)
@@ -225,7 +229,7 @@ DAQSource::~DAQSource() {
 void DAQSource::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   edm::ParameterSetDescription desc;
   desc.setComment("File-based Filter Farm input source for reading raw data from BU ramdisk (unified)");
-  desc.addUntracked<std::string>("dataMode", "FRD")->setComment("Data mode: event 'FRD', 'FRSStriped', 'ScoutingRun2'");
+  desc.addUntracked<std::string>("dataMode", "FRD")->setComment("Data mode: event 'FRD', 'FRSStriped', 'ScoutingRun3'");
   desc.addUntracked<unsigned int>("eventChunkSize", 64)->setComment("Input buffer (chunk) size");
   desc.addUntracked<unsigned int>("maxChunkSize", 0)
       ->setComment("Maximum chunk size allowed if buffer is resized to fit data. If 0 is specifier, use chunk size");
@@ -1199,7 +1203,6 @@ void DAQSource::readWorker(unsigned int tid) {
         fileDescriptor = -1;
       } else
         assert(fileDescriptor == -1);
-
       if (fitToBuffer && bufferLeft != file->diskFileSizes_[0]) {
         edm::LogError("DAQSource") << "mismatch between read file size for file -: " << file->fileNames_[0]
                                    << " read:" << bufferLeft << " expected:" << file->diskFileSizes_[0];
