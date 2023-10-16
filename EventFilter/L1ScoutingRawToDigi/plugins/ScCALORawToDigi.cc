@@ -22,7 +22,7 @@ ScCaloRawToDigi::ScCaloRawToDigi(const edm::ParameterSet& iConfig) {
   // bx_taus.reserve(12);
   // bx_eGammas.reserve(12);
   // bx_etSums.reserve(12);
-  dummyLVec_.reset( new ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>>() );
+  //dummyLVec_.reset( new ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>>() );
 }
 
 ScCaloRawToDigi::~ScCaloRawToDigi() {};
@@ -102,7 +102,10 @@ void ScCaloRawToDigi::unpackOrbit(
     // bx_eGammas.clear();
     // bx_etSums.clear(); 
 
+    math::PtEtaPhiMLorentzVector vec;
+
     int32_t ET(0), Eta(0), Phi(0), Iso(0);
+    float   fET(0), fEta(0), fPhi(0);
 
     // unpack jets from first link
     for (uint32_t i=0; i<6; i++) {
@@ -114,9 +117,15 @@ void ScCaloRawToDigi::unpackOrbit(
         Iso = 0;
 
         if (Eta > 127) Eta = Eta - 256;
+        fPhi = Phi * demux::scales::phi_scale; fPhi = fPhi>=2.*M_PI ? fPhi-2.*M_PI : fPhi;
+        fEta = Eta * demux::scales::eta_scale;
+        fET  = ET  * demux::scales::et_scale;
+
+        //vec = math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.);
         
-        l1t::Jet jet(*dummyLVec_, ET, Eta, Phi, Iso);
-        jets->push_back(bx,jet);
+        //l1t::Jet jet(*dummyLVec_, ET, Eta, Phi, Iso);
+        l1t::Jet jet(math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.), ET, Eta, Phi, Iso);
+        jets->push_back(bx, jet);
         // bx_jets.emplace_back(l1t::Jet(*dummyLVec_, ET, Eta, Phi, Iso));
       } 
     } // end link1 jet unpacking loop
@@ -131,9 +140,15 @@ void ScCaloRawToDigi::unpackOrbit(
         Iso = 0;
 
         if (Eta > 127) Eta = Eta - 256;
+        fPhi = Phi * demux::scales::phi_scale; fPhi = fPhi>=2.*M_PI ? fPhi-2.*M_PI : fPhi;
+        fEta = Eta * demux::scales::eta_scale;
+        fET  = ET  * demux::scales::et_scale;
+
+        //vec = math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.);
         
-        l1t::Jet jet(*dummyLVec_, ET, Eta, Phi, Iso);
-        jets->push_back(bx,jet);
+        //l1t::Jet jet(*dummyLVec_, ET, Eta, Phi, Iso);
+        l1t::Jet jet(math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.), ET, Eta, Phi, Iso);
+        jets->push_back(bx, jet);
         // bx_jets.emplace_back(l1t::Jet(*dummyLVec_, ET, Eta, Phi, Iso));
       } 
     } // end link1 jet unpacking loop
@@ -151,8 +166,14 @@ void ScCaloRawToDigi::unpackOrbit(
         Iso   = ((bl->egamma1[i] >> demux::shiftsEGamma::iso) & demux::masksEGamma::iso);
 
         if (Eta > 127) Eta = Eta - 256;
+        fPhi = Phi * demux::scales::phi_scale; fPhi = fPhi>=2.*M_PI ? fPhi-2.*M_PI : fPhi;
+        fEta = Eta * demux::scales::eta_scale;
+        fET  = ET  * demux::scales::et_scale;
+
+        //vec = math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.);
         
-        l1t::EGamma eGamma(*dummyLVec_, ET, Eta, Phi, 0, Iso);
+        //l1t::EGamma eGamma(*dummyLVec_, ET, Eta, Phi, 0, Iso);
+        l1t::EGamma eGamma(math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.), ET, Eta, Phi, 0, Iso);
         eGammas->push_back(bx, eGamma);
         // bx_eGammas.emplace_back(l1t::EGamma(*dummyLVec_, ET, Eta, Phi, 0, Iso));
       }
@@ -167,8 +188,14 @@ void ScCaloRawToDigi::unpackOrbit(
         Iso   = ((bl->egamma2[i] >> demux::shiftsEGamma::iso) & demux::masksEGamma::iso);
 
         if (Eta > 127) Eta = Eta - 256;
+        fPhi = Phi * demux::scales::phi_scale; fPhi = fPhi>=2.*M_PI ? fPhi-2.*M_PI : fPhi;
+        fEta = Eta * demux::scales::eta_scale;
+        fET  = ET  * demux::scales::et_scale;
+
+        //vec = math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.);
         
-        l1t::EGamma eGamma(*dummyLVec_, ET, Eta, Phi, 0, Iso);
+        //l1t::EGamma eGamma(*dummyLVec_, ET, Eta, Phi, 0, Iso);
+        l1t::EGamma eGamma(math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.), ET, Eta, Phi, 0, Iso);
         eGammas->push_back(bx, eGamma);
         // bx_eGammas.emplace_back(l1t::EGamma(*dummyLVec_, ET, Eta, Phi, 0, Iso));
       }
@@ -187,9 +214,15 @@ void ScCaloRawToDigi::unpackOrbit(
           Phi   = ((bl->tau1[i] >> demux::shiftsTau::phi) & demux::masksTau::phi);
           Iso   = ((bl->tau1[i] >> demux::shiftsTau::iso) & demux::masksTau::iso);
 
-          if (Eta > 127) Eta = Eta - 256; 
+          if (Eta > 127) Eta = Eta - 256;
+          fPhi = Phi * demux::scales::phi_scale; fPhi = fPhi>=2.*M_PI ? fPhi-2.*M_PI : fPhi;
+          fEta = Eta * demux::scales::eta_scale;
+          fET  = ET  * demux::scales::et_scale;
 
-          l1t::Tau tau(*dummyLVec_, ET, Eta, Phi, 0, Iso);
+          //vec = math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.); 
+
+          // l1t::Tau tau(*dummyLVec_, ET, Eta, Phi, 0, Iso);
+          l1t::Tau tau(math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.), ET, Eta, Phi, 0, Iso);
           taus->push_back(bx, tau);
           //bx_taus.emplace_back(l1t::Tau(*dummyLVec_, ET, Eta, Phi, 0, Iso));
       }
@@ -203,9 +236,15 @@ void ScCaloRawToDigi::unpackOrbit(
           Phi   = ((bl->tau2[i] >> demux::shiftsTau::phi) & demux::masksTau::phi);
           Iso   = ((bl->tau2[i] >> demux::shiftsTau::iso) & demux::masksTau::iso);
 
-          if (Eta > 127) Eta = Eta - 256;   
+          if (Eta > 127) Eta = Eta - 256;
+          fPhi = Phi * demux::scales::phi_scale; fPhi = fPhi>=2.*M_PI ? fPhi-2.*M_PI : fPhi;
+          fEta = Eta * demux::scales::eta_scale;
+          fET  = ET  * demux::scales::et_scale;
 
-          l1t::Tau tau(*dummyLVec_, ET, Eta, Phi, 0, Iso);
+          //vec = math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.);  
+
+          // l1t::Tau tau(*dummyLVec_, ET, Eta, Phi, 0, Iso);
+          l1t::Tau tau(math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.), ET, Eta, Phi, 0, Iso);
           taus->push_back(bx, tau);
           //bx_taus.emplace_back(l1t::Tau(*dummyLVec_, ET, Eta, Phi, 0, Iso));
       }
@@ -215,78 +254,94 @@ void ScCaloRawToDigi::unpackOrbit(
     // taus->push_back(bx, bx_taus);   
 
     // unpack et sums
-    int32_t ETEt(0), ETEttem(0), //ETMinBiasHF(0),
-            HTEt(0), HTtowerCount(0), //HTMinBiasHF(0),
-            ETmissEt(0), ETmissPhi(0), ETmissASYMET(0), //ETmissMinBiasHF(0),
-            HTmissEt(0), HTmissPhi(0), HTmissASYMHT(0), //HTmissMinBiasHF(0),
-            ETHFmissEt(0), ETHFmissPhi(0), ETHFmissASYMETHF(0), //ETHFmissCENT(0),
-            HTHFmissEt(0), HTHFmissPhi(0), HTHFmissASYMHTHF(0); //HTHFmissCENT(0);
+    // int32_t ETEt(0), // ETEttem(0), //ETMinBiasHF(0),
+    //         HTEt(0), // HTtowerCount(0), //HTMinBiasHF(0),
+    //         ETmissEt(0), ETmissPhi(0), // ETmissASYMET(0), //ETmissMinBiasHF(0),
+    //         HTmissEt(0), HTmissPhi(0); // HTmissASYMHT(0), //HTmissMinBiasHF(0),
+            //ETHFmissEt(0), ETHFmissPhi(0), // ETHFmissASYMETHF(0), //ETHFmissCENT(0),
+            //HTHFmissEt(0), HTHFmissPhi(0), // HTHFmissASYMHTHF(0); //HTHFmissCENT(0);
+
+    int32_t ETEt(0), HTEt(0), ETmissEt(0), ETmissPhi(0), HTmissEt(0), HTmissPhi(0);
+    float fETEt(0), fHTEt(0), fETmissEt(0), fHTmissEt(0), fETmissPhi(0), fHTmissPhi(0);
 
     // ET
     ETEt        = ((bl->sum[0] >> demux::shiftsESums::ETEt)        & demux::masksESums::ETEt);
-    ETEttem     = ((bl->sum[0] >> demux::shiftsESums::ETEttem)     & demux::masksESums::ETEttem);
-    //ETMinBiasHF = ((bl->sum[0] >> demux::shiftsESums::ETMinBiasHF) & demux::masksESums::ETMinBiasHF);
+    // ETEttem     = ((bl->sum[0] >> demux::shiftsESums::ETEttem)     & demux::masksESums::ETEttem);
+    // //ETMinBiasHF = ((bl->sum[0] >> demux::shiftsESums::ETMinBiasHF) & demux::masksESums::ETMinBiasHF);
+    fETEt       = ETEt * demux::scales::et_scale;
     
-    l1t::EtSum sum = l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kTotalEt, ETEt);
+    //vec = math::PtEtaPhiMLorentzVector(fETEt, 0, 0, 0.);
+    //l1t::EtSum sum = l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kTotalEt, ETEt);
+    l1t::EtSum sum = l1t::EtSum(math::PtEtaPhiMLorentzVector(fETEt, 0, 0, 0.), l1t::EtSum::EtSumType::kTotalEt, ETEt);
     etSums->push_back(bx, sum);
-    sum  = l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kTotalEtEm, ETEttem);
-    etSums->push_back(bx, sum);
+    // sum  = l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kTotalEtEm, ETEttem);
+    // etSums->push_back(bx, sum);
     
     // HT
     HTEt         = ((bl->sum[1] >> demux::shiftsESums::HTEt)         & demux::masksESums::HTEt);
-    HTtowerCount = ((bl->sum[1] >> demux::shiftsESums::HTtowerCount) & demux::masksESums::HTtowerCount);
-    //HTMinBiasHF  = ((bl->sum[1] >> demux::shiftsESums::HTMinBiasHF)  & demux::masksESums::HTMinBiasHF);
+    // HTtowerCount = ((bl->sum[1] >> demux::shiftsESums::HTtowerCount) & demux::masksESums::HTtowerCount);
+    // //HTMinBiasHF  = ((bl->sum[1] >> demux::shiftsESums::HTMinBiasHF)  & demux::masksESums::HTMinBiasHF);
+    fHTEt        = HTEt * demux::scales::et_scale;
 
-    sum = l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kTotalHt, HTEt);
+    // vec = math::PtEtaPhiMLorentzVector(fHTEt, 0, 0, 0.);
+    sum = l1t::EtSum(math::PtEtaPhiMLorentzVector(fHTEt, 0, 0, 0.), l1t::EtSum::EtSumType::kTotalHt, HTEt);
     etSums->push_back(bx, sum);
-    sum = l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kTowerCount, HTtowerCount);
-    etSums->push_back(bx, sum);
+    // sum = l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kTowerCount, HTtowerCount);
+    // etSums->push_back(bx, sum);
 
     // ETMiss
     ETmissEt        = ((bl->sum[2] >> demux::shiftsESums::ETmissEt)        & demux::masksESums::ETmissEt);
     ETmissPhi       = ((bl->sum[2] >> demux::shiftsESums::ETmissPhi)       & demux::masksESums::ETmissPhi);
-    ETmissASYMET    = ((bl->sum[2] >> demux::shiftsESums::ETmissASYMET)    & demux::masksESums::ETmissASYMET);
-    //ETmissMinBiasHF = ((bl->sum[2] >> demux::shiftsESums::ETmissMinBiasHF) & demux::masksESums::ETmissMinBiasHF);
+    // ETmissASYMET    = ((bl->sum[2] >> demux::shiftsESums::ETmissASYMET)    & demux::masksESums::ETmissASYMET);
+    // //ETmissMinBiasHF = ((bl->sum[2] >> demux::shiftsESums::ETmissMinBiasHF) & demux::masksESums::ETmissMinBiasHF);
+    fETmissEt  = ETmissEt  * demux::scales::et_scale;
+    fETmissPhi = ETmissPhi * demux::scales::phi_scale;
+    fETmissPhi = fETmissPhi>2.*M_PI? fETmissPhi - 2.*M_PI : fETmissPhi;
     
-    sum = l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kMissingEt, ETmissEt, 0, ETmissPhi);
+    //vec = math::PtEtaPhiMLorentzVector(fETmissEt, 0, fETmissPhi, 0.);
+    sum = l1t::EtSum(math::PtEtaPhiMLorentzVector(fETmissEt, 0, fETmissPhi, 0.), l1t::EtSum::EtSumType::kMissingEt, ETmissEt, 0, ETmissPhi);
     etSums->push_back(bx, sum);
-    sum = l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kAsymEt, ETmissASYMET);
-    etSums->push_back(bx, sum);
+    // sum = l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kAsymEt, ETmissASYMET);
+    // etSums->push_back(bx, sum);
     
 
     // HTMiss
     HTmissEt        = ((bl->sum[3] >> demux::shiftsESums::HTmissEt)        & demux::masksESums::HTmissEt);
     HTmissPhi       = ((bl->sum[3] >> demux::shiftsESums::HTmissPhi)       & demux::masksESums::HTmissPhi);
-    HTmissASYMHT    = ((bl->sum[3] >> demux::shiftsESums::HTmissASYMHT)    & demux::masksESums::HTmissASYMHT);
-    //HTmissMinBiasHF = ((bl->sum[3] >> demux::shiftsESums::HTmissMinBiasHF) & demux::masksESums::HTmissMinBiasHF);
+    // HTmissASYMHT    = ((bl->sum[3] >> demux::shiftsESums::HTmissASYMHT)    & demux::masksESums::HTmissASYMHT);
+    // //HTmissMinBiasHF = ((bl->sum[3] >> demux::shiftsESums::HTmissMinBiasHF) & demux::masksESums::HTmissMinBiasHF);
+    fHTmissEt  = HTmissEt  * demux::scales::et_scale;
+    fHTmissPhi = HTmissPhi * demux::scales::phi_scale;
+    fHTmissPhi = fHTmissPhi>2.*M_PI? fHTmissPhi - 2.*M_PI : fHTmissPhi;
 
-    sum = l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kMissingHt, HTmissEt, 0, HTmissPhi);
+    //vec = math::PtEtaPhiMLorentzVector(fHTmissEt, 0, fHTmissPhi, 0.);
+    sum = l1t::EtSum(math::PtEtaPhiMLorentzVector(fHTmissEt, 0, fHTmissPhi, 0.), l1t::EtSum::EtSumType::kMissingHt, HTmissEt, 0, HTmissPhi);
     etSums->push_back(bx, sum);
-    sum = l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kAsymHt, HTmissASYMHT);
-    etSums->push_back(bx, sum);
+    // sum = l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kAsymHt, HTmissASYMHT);
+    // etSums->push_back(bx, sum);
 
-    // ETHFMiss
-    ETHFmissEt       = ((bl->sum[4] >> demux::shiftsESums::ETHFmissEt)       & demux::masksESums::ETHFmissEt);
-    ETHFmissPhi      = ((bl->sum[4] >> demux::shiftsESums::ETHFmissPhi)      & demux::masksESums::ETHFmissPhi);
-    ETHFmissASYMETHF = ((bl->sum[4] >> demux::shiftsESums::ETHFmissASYMETHF) & demux::masksESums::ETHFmissASYMETHF);
-    //ETHFmissCENT     = ((bl.sum[4] >> demux::shiftsESums::ETHFmissCENT)     & demux::masksESums::ETHFmissCENT);
+    // // ETHFMiss
+    // ETHFmissEt       = ((bl->sum[4] >> demux::shiftsESums::ETHFmissEt)       & demux::masksESums::ETHFmissEt);
+    // ETHFmissPhi      = ((bl->sum[4] >> demux::shiftsESums::ETHFmissPhi)      & demux::masksESums::ETHFmissPhi);
+    // ETHFmissASYMETHF = ((bl->sum[4] >> demux::shiftsESums::ETHFmissASYMETHF) & demux::masksESums::ETHFmissASYMETHF);
+    // //ETHFmissCENT     = ((bl.sum[4] >> demux::shiftsESums::ETHFmissCENT)     & demux::masksESums::ETHFmissCENT);
     
-    sum = l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kMissingEtHF, ETHFmissEt, 0, ETHFmissPhi);
-    etSums->push_back(bx, sum);
-    sum =  l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kAsymEtHF, ETHFmissASYMETHF);
-    etSums->push_back(bx, sum);
+    // sum = l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kMissingEtHF, ETHFmissEt, 0, ETHFmissPhi);
+    // etSums->push_back(bx, sum);
+    // sum =  l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kAsymEtHF, ETHFmissASYMETHF);
+    // etSums->push_back(bx, sum);
 
    
-    // HTHFMiss
-    HTHFmissEt       = ((bl->sum[5] >> demux::shiftsESums::HTHFmissEt)       & demux::masksESums::HTHFmissEt);
-    HTHFmissPhi      = ((bl->sum[5] >> demux::shiftsESums::HTHFmissPhi)      & demux::masksESums::HTHFmissPhi);
-    HTHFmissASYMHTHF = ((bl->sum[5] >> demux::shiftsESums::HTHFmissASYMHTHF) & demux::masksESums::HTHFmissASYMHTHF);
-    //HTHFmissCENT     = ((bl->sum[5] >> demux::shiftsESums::HTHFmissCENT)     & demux::masksESums::HTHFmissCENT);
+    // // HTHFMiss
+    // HTHFmissEt       = ((bl->sum[5] >> demux::shiftsESums::HTHFmissEt)       & demux::masksESums::HTHFmissEt);
+    // HTHFmissPhi      = ((bl->sum[5] >> demux::shiftsESums::HTHFmissPhi)      & demux::masksESums::HTHFmissPhi);
+    // HTHFmissASYMHTHF = ((bl->sum[5] >> demux::shiftsESums::HTHFmissASYMHTHF) & demux::masksESums::HTHFmissASYMHTHF);
+    // //HTHFmissCENT     = ((bl->sum[5] >> demux::shiftsESums::HTHFmissCENT)     & demux::masksESums::HTHFmissCENT);
 
-    sum = l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kMissingHtHF, HTHFmissEt, 0, HTHFmissPhi);
-    etSums->push_back(bx, sum);
-    sum =  l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kAsymHtHF, HTHFmissASYMHTHF);
-    etSums->push_back(bx, sum);
+    // sum = l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kMissingHtHF, HTHFmissEt, 0, HTHFmissPhi);
+    // etSums->push_back(bx, sum);
+    // sum =  l1t::EtSum(*dummyLVec_, l1t::EtSum::EtSumType::kAsymHtHF, HTHFmissASYMHTHF);
+    // etSums->push_back(bx, sum);
 
     // add sums to event
     // etSums->push_back(bx, bx_etSums);

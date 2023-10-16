@@ -10,7 +10,7 @@ ScGMTRawToDigi::ScGMTRawToDigi(const edm::ParameterSet& iConfig) {
   rawToken = consumes<SRDCollection>(srcInputTag);
   
   bx_muons.reserve(8);
-  dummyLVec_.reset( new ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>>() );
+  //dummyLVec_.reset( new ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double>>() );
 }
 
 ScGMTRawToDigi::~ScGMTRawToDigi() {};
@@ -139,25 +139,43 @@ void ScGMTRawToDigi::unpackOrbit(
       }
 
       // convert to physical units using scales
-      //float fpt      = (ipt     -1) * ugmt::scales::pt_scale;                 // -1 since bin 0 is for invalid muons
+      float fpt      = (ipt     -1) * ugmt::scales::pt_scale;                 // -1 since bin 0 is for invalid muons
       float fptuncon = (iptuncon-1) * ugmt::scales::ptunconstrained_scale;    // -1 since bin 0 is for invalid muons
       float fphi     = iphi         * ugmt::scales::phi_scale;
       float fphiext  = iphiext      * ugmt::scales::phi_scale;
-      //float feta     = ieta         * ugmt::scales::eta_scale;
+      float feta     = ieta         * ugmt::scales::eta_scale;
       float fetaext  = ietaext      * ugmt::scales::eta_scale;
 
       if (fphiext>M_PI) fphiext = fphiext - 2.*M_PI;
       if (fphi   >M_PI) fphi    = fphi    - 2.*M_PI;
 
+      l1t::Muon muon;
+      math::PtEtaPhiMLorentzVector vec{fpt, feta, fphi, 0.};
 
-      l1t::Muon muon(
-          *dummyLVec_, ipt, ieta, iphi, qual, chrg, chrg != 0, iso,
-          index, 0, false, 0, 0, 0, 0,
-          ietaext, iphiext, fetaext, fphiext,
-          iptuncon, fptuncon, idxy
-      ); 
+      muon.setP4(vec);
+      muon.setHwPt(ipt);
+      muon.setHwEta(ieta);
+      muon.setHwPhi(iphi);
+      muon.setHwQual(qual);
+      muon.setCharge(chrg);
+      muon.setHwChargeValid(chrg != 0);
+      muon.setHwIso(iso);
+      muon.setTfMuonIndex(index);
+      muon.setHwEtaAtVtx(ietaext);
+      muon.setHwPhiAtVtx(iphiext);
+      muon.setEtaAtVtx(fetaext);
+      muon.setPhiAtVtx(fphiext);
+      muon.setHwPtUnconstrained(iptuncon);
+      muon.setPtUnconstrained(fptuncon);
+      muon.setHwDXY(idxy);
 
-      
+      // l1t::Muon muon(
+      //     *dummyLVec_{fpt, feta, fphi, 0}, ipt, ieta, iphi, qual, chrg, chrg != 0, iso,
+      //     index, 0, false, 0, 0, 0, 0,
+      //     ietaext, iphiext, fetaext, fphiext,
+      //     iptuncon, fptuncon, idxy
+      // ); 
+
       muons->push_back(bx, muon);
       //muons->push_back(bx, muon);
 

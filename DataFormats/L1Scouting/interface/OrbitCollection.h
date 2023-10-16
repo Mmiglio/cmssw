@@ -41,12 +41,26 @@ namespace scoutingRun3 {
         //bxData_.clear();
       }
 
+      // get the vector of objects for a specific bx
+      const std::vector<T*> getBxVector(int bx) const {
+        int currBxIdx = index_.at(bx);
+        int nextBxIdx = index_.at(bx+1);
+        const std::vector<T*> dataVector;
+        for(int idx=currBxIdx; idx<nextBxIdx; idx++){
+          dataVector.append(&flatData_[idx]);
+        }
+        return dataVector;
+      }
+
+      // to be removed?
       const std::vector<int>* getIndex() const { return &index_; }
       int getIndex(int i) const { return index_[i]; }
 
+      // to be removed?
       const std::vector<T>* getFlatData() const { return &flatData_; }
       const T* getFlatData(int i) const { return &(flatData_[i]); }
 
+      // to be removed?
       const std::vector<std::vector<T>>* getBxData() const { return &bxData_; }
       const std::vector<T>* getBxData(int i) const { return &(bxData_[i]); }
 
