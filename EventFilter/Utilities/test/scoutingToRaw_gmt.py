@@ -104,7 +104,7 @@ def parseMuonScoutingRawFile(infilepath, outdir, rn_override, maxorbits):
           fout.write(struct.pack('I',orbit_size+4)) #payload size
           fout.write(struct.pack('I',c_crc32c)) #payload checksum (not used)
 
-          fout.write(struct.pack('I', 0)) # write the GMT source ID
+          fout.write(struct.pack('I', 1)) # write the GMT source ID
 
           fout.write(orbit_data)
 

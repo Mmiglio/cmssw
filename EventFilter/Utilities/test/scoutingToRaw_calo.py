@@ -92,7 +92,7 @@ def parseCaloScoutingRawFile(infilepath, outdir, rn_override, maxorbits):
           fout.write(struct.pack('I',orbit_size+4)) #payload size + 4 bytes for source ID
           fout.write(struct.pack('I',c_crc32c)) #payload checksum (not used)
 
-          fout.write(struct.pack('I', 1)) # write the CALO source ID
+          fout.write(struct.pack('I', 2)) # write the CALO source ID
           fout.write(orbit_data)
 
           orbit_data = bytes()

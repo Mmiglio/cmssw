@@ -20,7 +20,7 @@ std::pair<bool, std::vector<std::string>> DataModeScoutingRun3::defineAdditional
   if (fileListMode) {
     //for the unit test
     for (int j=1; j<buNumSources_[0]; j++){
-	additionalFiles.push_back(primaryName+"_"+std::to_string(j));
+	    additionalFiles.push_back(primaryName+"_"+std::to_string(j));
     }
     return std::make_pair(true, additionalFiles);
   }

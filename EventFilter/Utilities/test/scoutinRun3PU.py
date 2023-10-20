@@ -127,7 +127,7 @@ process.output = cms.OutputModule("PoolOutputModule",
         "drop *",
         #"keep *_rawDataCollector_*_*",
         "keep *_GmtUnpacker_*_*",
-        "keep *_CaloUnpacker_*_*"
+        #"keep *_CaloUnpacker_*_*"
         ),
     #compressionLevel = cms.untracked.int32(1)
     )
