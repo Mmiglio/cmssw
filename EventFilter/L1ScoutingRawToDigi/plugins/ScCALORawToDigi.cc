@@ -127,6 +127,13 @@ void ScCaloRawToDigi::unpackOrbit(
         l1t::Jet jet(math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.), ET, Eta, Phi, Iso);
         jets->push_back(bx, jet);
         // bx_jets.emplace_back(l1t::Jet(*dummyLVec_, ET, Eta, Phi, Iso));
+
+        if (debug){
+          std::cout << "--- Jet link 1 ---\n";
+          std::cout <<"\tEt  [GeV/Hw]: "<< jet.pt() << "/" << jet.hwPt() << "\n";
+          std::cout <<"\tEta [rad/Hw]: " << jet.eta() << "/" << jet.hwEta() << "\n";
+          std::cout <<"\tPhi [rad/Hw]: " << jet.phi() << "/" << jet.hwPhi() << "\n";
+        }
       } 
     } // end link1 jet unpacking loop
     
@@ -150,6 +157,13 @@ void ScCaloRawToDigi::unpackOrbit(
         l1t::Jet jet(math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.), ET, Eta, Phi, Iso);
         jets->push_back(bx, jet);
         // bx_jets.emplace_back(l1t::Jet(*dummyLVec_, ET, Eta, Phi, Iso));
+
+        if (debug){
+          std::cout << "--- Jet link 2 ---\n";
+          std::cout <<"\tEt  [GeV/Hw]: " << jet.pt() << "/" << jet.hwPt() << "\n";
+          std::cout <<"\tEta [rad/Hw]: " << jet.eta() << "/" << jet.hwEta() << "\n";
+          std::cout <<"\tPhi [rad/Hw]: " << jet.phi() << "/" << jet.hwPhi() << "\n";
+        }
       } 
     } // end link1 jet unpacking loop
 
@@ -176,6 +190,13 @@ void ScCaloRawToDigi::unpackOrbit(
         l1t::EGamma eGamma(math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.), ET, Eta, Phi, 0, Iso);
         eGammas->push_back(bx, eGamma);
         // bx_eGammas.emplace_back(l1t::EGamma(*dummyLVec_, ET, Eta, Phi, 0, Iso));
+        if (debug){
+          std::cout << "--- E/g link 1 ---\n";
+          std::cout <<"\tEt  [GeV/Hw]: " << eGamma.pt()  << "/" << eGamma.hwPt() << "\n";
+          std::cout <<"\tEta [rad/Hw]: " << eGamma.eta() << "/" << eGamma.hwEta() << "\n";
+          std::cout <<"\tPhi [rad/Hw]: " << eGamma.phi() << "/" << eGamma.hwPhi() << "\n";
+          std::cout <<"\tIso [Hw]: " << eGamma.hwIso() << "\n";
+        }
       }
     } // end eg link 1
 
@@ -198,6 +219,13 @@ void ScCaloRawToDigi::unpackOrbit(
         l1t::EGamma eGamma(math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.), ET, Eta, Phi, 0, Iso);
         eGammas->push_back(bx, eGamma);
         // bx_eGammas.emplace_back(l1t::EGamma(*dummyLVec_, ET, Eta, Phi, 0, Iso));
+        if (debug){
+          std::cout << "--- E/g link 2 ---\n";
+          std::cout <<"\tEt  [GeV/Hw]: " << eGamma.pt()  << "/" << eGamma.hwPt() << "\n";
+          std::cout <<"\tEta [rad/Hw]: " << eGamma.eta() << "/" << eGamma.hwEta() << "\n";
+          std::cout <<"\tPhi [rad/Hw]: " << eGamma.phi() << "/" << eGamma.hwPhi() << "\n";
+          std::cout <<"\tIso [Hw]: " << eGamma.hwIso() << "\n";
+        }
       }
 
     } // end of eg unpacker
@@ -225,6 +253,13 @@ void ScCaloRawToDigi::unpackOrbit(
           l1t::Tau tau(math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.), ET, Eta, Phi, 0, Iso);
           taus->push_back(bx, tau);
           //bx_taus.emplace_back(l1t::Tau(*dummyLVec_, ET, Eta, Phi, 0, Iso));
+          if (debug){
+            std::cout << "--- Tau link 1 ---\n";
+            std::cout <<"\tEt  [GeV/Hw]: " << tau.pt()  << "/" << tau.hwPt() << "\n";
+            std::cout <<"\tEta [rad/Hw]: " << tau.eta() << "/" << tau.hwEta() << "\n";
+            std::cout <<"\tPhi [rad/Hw]: " << tau.phi() << "/" << tau.hwPhi() << "\n";
+            std::cout <<"\tIso [Hw]: " << tau.hwIso() << "\n";
+          }
       }
     } // end tau link 1
 
@@ -247,6 +282,13 @@ void ScCaloRawToDigi::unpackOrbit(
           l1t::Tau tau(math::PtEtaPhiMLorentzVector(fET, fEta, fPhi, 0.), ET, Eta, Phi, 0, Iso);
           taus->push_back(bx, tau);
           //bx_taus.emplace_back(l1t::Tau(*dummyLVec_, ET, Eta, Phi, 0, Iso));
+          if (debug){
+            std::cout << "--- Tau link 2 ---\n";
+            std::cout <<"\tEt  [GeV/Hw]: " << tau.pt()  << "/" << tau.hwPt() << "\n";
+            std::cout <<"\tEta [rad/Hw]: " << tau.eta() << "/" << tau.hwEta() << "\n";
+            std::cout <<"\tPhi [rad/Hw]: " << tau.phi() << "/" << tau.hwPhi() << "\n";
+            std::cout <<"\tIso [Hw]: " << tau.hwIso() << "\n";
+          }
       }
     } // end tau unpacker
 

@@ -3,6 +3,7 @@
 
 #include <DataFormats/L1Scouting/interface/SRawDataCollection.h>
 #include "DataFormats/L1Scouting/interface/OrbitCollection.h"
+#include "DataFormats/L1Scouting/interface/AnalysisTable.h"
 
 namespace scoutingRun3 {
   edm::Wrapper<scoutingRun3::OrbitCollection<l1t::Muon>>            MuonOrbitCollectionWrapper;
@@ -11,4 +12,6 @@ namespace scoutingRun3 {
   edm::Wrapper<scoutingRun3::OrbitCollection<l1t::Tau>>             TauOrbitCollectionWrapper;
   edm::Wrapper<scoutingRun3::OrbitCollection<l1t::EtSum>>           EtSumOrbitCollectionWrapper;
   edm::Wrapper<scoutingRun3::OrbitCollection<L1MuKBMTCombinedStub>> BmtfStubOrbitCollectionWrapper;
+
+  edm::Wrapper<scoutingRun3::AnalysisTable> AnalysisTableWrapper;
 }

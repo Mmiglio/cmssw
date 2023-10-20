@@ -20,41 +20,48 @@ namespace scoutingRun3 {
   class OrbitCollection {
 
     public:
-      OrbitCollection(): bxData_(3565), nObjects_(0) {}
+      OrbitCollection(): bxIndex_(3565,0), bxData_(3565), nObjects_(0) {}
 
       void push_back(int bx, T &object) {
           bxData_[bx].push_back(object);
           nObjects_ ++;
       }
 
+      void push_back_vector(int bx, std::vector<const T*> vec){
+        for(const T* obj: vec){
+          bxData_[bx].push_back(*obj);
+          nObjects_ ++;
+        }
+      }
+
       void flatten() {
-        index_.reserve(3565);
         flatData_.reserve(nObjects_);
-        index_[0] = 0;
+        bxIndex_[0] = 0;
         int idx = 1;
         for (auto &bxVec: bxData_) {
             flatData_.insert(flatData_.end(), bxVec.begin(), bxVec.end());
             // increase index position
-            index_[idx] = index_[idx-1] + bxVec.size();
+            bxIndex_[idx] = bxIndex_[idx-1] + bxVec.size();
             idx++;
         }
         //bxData_.clear();
       }
 
       // get the vector of objects for a specific bx
-      const std::vector<T*> getBxVector(int bx) const {
-        int currBxIdx = index_.at(bx);
-        int nextBxIdx = index_.at(bx+1);
-        const std::vector<T*> dataVector;
+      std::vector<const T*> getBxVector(int bx) const {
+        int currBxIdx = bxIndex_.at(bx);
+        int nextBxIdx = bxIndex_.at(bx+1);
+        std::vector<const T*> dataVector;
+
         for(int idx=currBxIdx; idx<nextBxIdx; idx++){
-          dataVector.append(&flatData_[idx]);
+          dataVector.push_back(&flatData_[idx]);
         }
         return dataVector;
       }
 
       // to be removed?
-      const std::vector<int>* getIndex() const { return &index_; }
-      int getIndex(int i) const { return index_[i]; }
+      const std::vector<int>* getIndex() const { return &bxIndex_; }
+      int getIndex(int i) const { return bxIndex_[i]; }
 
       // to be removed?
       const std::vector<T>* getFlatData() const { return &flatData_; }
@@ -68,7 +75,7 @@ namespace scoutingRun3 {
       int sizeBxData() const { return bxData_.size(); }
 
     private:
-      std::vector<int> index_;
+      std::vector<int> bxIndex_;
       std::vector<T> flatData_;
       mutable std::vector<std::vector<T>> bxData_;
       int nObjects_;

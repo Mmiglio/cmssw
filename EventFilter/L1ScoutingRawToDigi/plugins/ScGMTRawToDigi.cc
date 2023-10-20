@@ -82,7 +82,12 @@ void ScGMTRawToDigi::unpackOrbit(
     for (unsigned int i=0; i<mAcount+mBcount; i++) {
 
       uint32_t interm = (bl->mu[i].extra >> ugmt::shiftsMuon::interm) & ugmt::masksMuon::interm;
-      if (excludeIntermediate && (interm == 1)) continue;
+      if (excludeIntermediate && (interm == 1)){
+        if (debug){
+          std::cout << "Excluding intermediate muon\n";
+        }
+        continue;
+      }
 
       uint32_t index    = (bl->mu[i].s >> ugmt::shiftsMuon::index)  & ugmt::masksMuon::index;
       uint32_t ietaextu = (bl->mu[i].f >> ugmt::shiftsMuon::etaext) & ugmt::masksMuon::etaextv;
@@ -157,7 +162,7 @@ void ScGMTRawToDigi::unpackOrbit(
       muon.setHwEta(ieta);
       muon.setHwPhi(iphi);
       muon.setHwQual(qual);
-      muon.setCharge(chrg);
+      muon.setHwCharge(chrg);
       muon.setHwChargeValid(chrg != 0);
       muon.setHwIso(iso);
       muon.setTfMuonIndex(index);
@@ -178,6 +183,19 @@ void ScGMTRawToDigi::unpackOrbit(
 
       muons->push_back(bx, muon);
       //muons->push_back(bx, muon);
+
+      if (debug){
+        std::cout<<"--- Muon ---\n";
+        std::cout<<"\tPt  [GeV/Hw]: " << muon.pt()  << "/" << muon.hwPt() << "\n";
+        std::cout<<"\tEta [rad/Hw]: " << muon.eta() << "/" << muon.hwEta() << "\n";
+        std::cout<<"\tPhi [rad/Hw]: " << muon.phi() << "/" << muon.hwPhi() << "\n";
+        std::cout<<"\tCharge/valid: " << muon.hwCharge() << "/" << muon.hwChargeValid() << "\n";
+        std::cout<<"\tPhiVtx  [rad/Hw]: " << muon.phiAtVtx() << "/" << muon.hwPhiAtVtx() << "\n";
+        std::cout<<"\tEtaVtx  [rad/Hw]: " << muon.etaAtVtx() << "/" << muon.hwEtaAtVtx() << "\n";
+        std::cout<<"\tPt uncon[GeV/Hw]: " << muon.ptUnconstrained()  << "/" << muon.hwPtUnconstrained() << "\n";
+        std::cout<<"\tDxy: " << muon.hwDXY() << "\n";
+        std::cout<<"\tTF index: " << muon.tfMuonIndex() << "\n";
+      }
 
     } // end of bx
     

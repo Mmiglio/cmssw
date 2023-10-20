@@ -80,4 +80,7 @@
       ]]>
   </ioread>
   <class name="edm::Wrapper<scoutingRun3::BmtfStubOrbitCollection>"/>
+  <class name="scoutingRun3::AnalysisTable" />
+  <class name="edm::Wrapper<scoutingRun3::AnalysisTable>" />
+  <!-- <class name="edm::RefProd<scoutingRun3::AnalysisTable>"/> -->
 </lcgdict>
