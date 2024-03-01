@@ -13,7 +13,7 @@ namespace l1ScoutingRun3 {
       // 0x0 final
       // following 4 bits for link id
       static constexpr uint32_t bx = 0;
-      static constexpr uint32_t interm = 31;  // updated for new run3 format (tj)
+      static constexpr uint32_t interm = 31;
       // shifts for muon 64 bits
       static constexpr uint32_t phiext = 0;
       static constexpr uint32_t pt = 10;
@@ -32,7 +32,6 @@ namespace l1ScoutingRun3 {
   }  // namespace ugmt
 
   namespace demux {
-    // struct shiftsCaloJet{
     struct shiftsJet {
       static constexpr uint32_t ET = 0;
       static constexpr uint32_t eta = 11;
@@ -41,7 +40,6 @@ namespace l1ScoutingRun3 {
       static constexpr uint32_t qual = 28;
     };
 
-    // struct shiftsCaloEGamma{
     struct shiftsEGamma {
       static constexpr uint32_t ET = 0;
       static constexpr uint32_t eta = 9;
@@ -49,7 +47,6 @@ namespace l1ScoutingRun3 {
       static constexpr uint32_t iso = 25;
     };
 
-    // struct shiftsCaloTau{
     struct shiftsTau {
       static constexpr uint32_t ET = 0;
       static constexpr uint32_t eta = 9;
@@ -57,13 +54,12 @@ namespace l1ScoutingRun3 {
       static constexpr uint32_t iso = 25;
     };
 
-    // struct shiftsCaloESums{
     struct shiftsESums {
-      static constexpr uint32_t ETEt = 0;  // Et of ET object
+      static constexpr uint32_t ETEt = 0;
       static constexpr uint32_t ETEttem = 12;
       static constexpr uint32_t ETMinBiasHF = 28;
 
-      static constexpr uint32_t HTEt = 0;  // Et of HT object
+      static constexpr uint32_t HTEt = 0;
       static constexpr uint32_t HTtowerCount = 12;
       static constexpr uint32_t HTMinBiasHF = 28;
 
@@ -88,6 +84,21 @@ namespace l1ScoutingRun3 {
       static constexpr uint32_t HTHFmissCENT = 28;
     };
   }  // namespace demux
+
+  namespace bmtf {
+    struct shiftsStubs {
+        static constexpr uint32_t valid     =  0;
+        static constexpr uint32_t phi       =  1;
+        static constexpr uint32_t phiB      = 13;
+        static constexpr uint32_t qual      = 23;
+        static constexpr uint32_t eta       = 26;
+        static constexpr uint32_t qeta      = 33;
+        static constexpr uint32_t station   = 40;
+        static constexpr uint32_t wheel     = 42;
+        static constexpr uint32_t reserved  = 45;
+        static constexpr uint32_t bx        = 48;
+    };
+  } // namespace bmtf
 
   struct header_shifts {
     static constexpr uint32_t bxmatch = 24;
