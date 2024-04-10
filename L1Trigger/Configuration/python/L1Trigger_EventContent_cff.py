@@ -100,6 +100,15 @@ L1TriggerFEVTDEBUG = cms.PSet(
 )
 
 
+# L1 Scouting event content
+L1TScoutRAW = cms.PSet(
+    outputCommands = cms.vstring( *(
+        'keep *_l1ScGmtUnpacker_*_*',
+        'keep *_l1ScCaloUnpacker_*_*'
+    ) )
+)
+
+
 def _appendStage2Digis(obj):
     l1Stage2Digis = [
         'keep *_gtStage2Digis_*_*',

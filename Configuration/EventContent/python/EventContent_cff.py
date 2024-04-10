@@ -206,7 +206,7 @@ L1SCOUTEventContent = cms.PSet(
     compressionAlgorithm=cms.untracked.string("LZMA"),
     compressionLevel=cms.untracked.int32(4)
 )
-L1SCOUTEventContent.outputCommands.extend(L1TriggerRAW.outputCommands)
+L1SCOUTEventContent.outputCommands.extend(L1TScoutRAW.outputCommands)
 
 #
 #
